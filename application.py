@@ -5,7 +5,6 @@ import requests
 import requests.auth
 import json
 import re
-from personal import private
 import video
 
 app = Flask(__name__)
