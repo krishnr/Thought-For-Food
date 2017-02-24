@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+    margin: 25px 50px;
+    background-color: #f2f0ea;
+}
+
+#title {
+    text-align: center;
+}
+
+iframe {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+}

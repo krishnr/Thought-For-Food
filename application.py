@@ -5,27 +5,29 @@ import requests
 import requests.auth
 import json
 import re
+from personal import private
+import video
 
 app = Flask(__name__)
 
 @app.route('/')
+
 def index():
+    num_videos = 5
 
-    response = requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=headers)
-    access_token = response.json()['access_token']
-    token_type = response.json()['token_type']
-    auth_string = token_type + ' ' + access_token
+    url = 'https://reddit.com/r/mealtimevideos/top/.json?t=week&limit=%s' % num_videos
+    response = requests.get(url, headers = {'User-agent': 'Chrome'})
 
-    url = 'https://oauth.reddit.com/r/mealtimevideos/top/.json?t=week&limit=5'
-    headers['Authorization'] = auth_string
-    response = requests.get(url, headers=headers)
     links = []
-    for i in range(0,len(response.json()['data']['children'])):
-        print response.json()['data']['children'][i]['data']['url']
-        links.append(re.search(r"([\w-]+)$",response.json()['data']['children'][i]['data']['url']).group(0))
-    print links
+    assert len(response.json()['data']['children']) == num_videos
+
+    for i in range(num_videos):
+        url = response.json()['data']['children'][i]['data']['url']
+        link = video.get_video_id(url)
+        links.append(link)
+
     src = 'https://youtube.com/embed/' + links[0] + '?playlist=' + ','.join(links[1:])
-    print src
+
     return render_template('index.html', src=src)
 
 if __name__ == '__main__':
